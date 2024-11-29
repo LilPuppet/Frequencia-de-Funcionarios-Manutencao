@@ -1,0 +1,25 @@
+Orientações para configuração:
+1) Clone o repositório;
+2) No diretório raiz do projeto, crie o ambiente virtual:
+# python -m venv venv
+3) Ative o ambiente virtual:
+* Linux: . venv/bin/activate
+  Windows: .\venv\Scripts\activate
+4) Instale as dependências:
+# pip install -r requirements.txt
+5) Coloque o servidor em execução:
+# python manage.py runserver
+# django-admin startapp nomedoapp
+
+pra criar a estrutura do app do zero : django-admin startproject nomedoprojeto
+
+Faz os models primeiro, depois atualiza o banco
+
+Alterar o banco com os models novos:
+ir em config, pycache e settings.py, adicionando o app que você quer por no banco
+python manage.py makemigrations
+python manage.py migrate
+
+Agora passa pra o serializers (cria uma pasta chamada api, cria serializers.py), depois pro views (mesma coisa de serializers), aí mexemos no router (fica dentro do config ou djando_quickprojects, __pycache__, urls.py)
+
+Para aparecer, vá no admin e adicione o model no admin.py
