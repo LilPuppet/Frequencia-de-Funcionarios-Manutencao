@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from users.models import Professor, UserProfileExample
+from users.models import Funcionario, UserProfileExample
 
 class UserProfileExampleSerializer(serializers.ModelSerializer):
 
@@ -8,13 +8,13 @@ class UserProfileExampleSerializer(serializers.ModelSerializer):
         fields = ['id', 'address', 'phone_number', 'birth_date', 'user']
 
 
-class ProfessorSerializer(serializers.ModelSerializer):
+class FuncionarioSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Professor
+        model = Funcionario
         fields = "__all__"
 
-class ProfessorCreateSerializer(serializers.Serializer):
+class FuncionarioCreateSerializer(serializers.Serializer):
     nome = serializers.CharField(max_length=140)
     matricula = serializers.CharField(max_length=12)
     departamento = serializers.CharField(max_length=140)

@@ -14,7 +14,7 @@ class UserProfileExample(models.Model):
         verbose_name = "Profile"
         verbose_name_plural = "Profiles"
 
-class Professor(models.Model):
+class Funcionario(models.Model):
 
     nome = models.CharField(max_length=140)
     matricula = models.CharField(max_length=12)
@@ -25,5 +25,5 @@ class Professor(models.Model):
         return self.nome
     
     class Meta:
-        verbose_name = "Professor"
-        verbose_name_plural = "Professores"
+        verbose_name = "Funcionario"
+        verbose_name_plural = "Funcionarios"

@@ -20,15 +20,12 @@ from rest_framework.routers import SimpleRouter
 from rest_framework.authtoken import views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from frequencias.api.views import FrequenciaViewSet
-from users.api.views import ProfessorViewSet, UserProfileExampleViewSet
-from reservas.api.views import ReservaViewSet, SalaViewSet
+from users.api.views import FuncionarioViewSet, UserProfileExampleViewSet
 
 router = SimpleRouter()
 
 router.register("users", UserProfileExampleViewSet, basename="users")
-router.register("salas", SalaViewSet, basename="salas")
-router.register("reservas", ReservaViewSet, basename="reservas")
-router.register("professores", ProfessorViewSet, basename="professores")
+router.register("funcionarios", FuncionarioViewSet, basename="funcionarios")
 router.register("frequencia", FrequenciaViewSet, basename="Frequências")
 
 
