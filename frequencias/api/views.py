@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from frequencias.api.serializers import FrequenciaSerializer
 from frequencias.models import FrequenciaModel
+from users.api.serializers import FuncionarioSerializer
 
 class FrequenciaViewSet(ModelViewSet):
     serializer_class = FrequenciaSerializer
@@ -12,11 +13,12 @@ class FrequenciaViewSet(ModelViewSet):
     queryset = FrequenciaModel.objects.all()
 
     def create(self, request):
-        funcionario = request.user
+        serializer = FuncionarioSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        funcionario = serializer.validated_data['funcionario']
         hora_atual = datetime.now()
 
-        # Verifica se há uma frequência aberta (hora_fim é nula) para o usuário
-        frequencia_aberta = FrequenciaModel.objects.filter(funcionario=funcionario, hora_fim__isnull=True).first()
+        frequencia_aberta = FrequenciaModel.objects.filter(funcionario=funcionario, hora_fim__isnull=True).exists()
 
         if frequencia_aberta:
             frequencia_aberta.hora_fim = hora_atual
@@ -26,7 +28,7 @@ class FrequenciaViewSet(ModelViewSet):
                 {"Info": "Frequência encerrada com sucesso!", "data": serializer_saida.data},
                 status=status.HTTP_200_OK
             )
-        else:
+        else: #pegar o funcionario
             nova_frequencia = FrequenciaModel.objects.create(
                 funcionario=funcionario,
                 hora_inicio=hora_atual,

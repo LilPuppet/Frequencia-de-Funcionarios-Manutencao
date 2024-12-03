@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from users.models import Funcionario
@@ -5,7 +6,7 @@ from users.models import Funcionario
 # Create your models here.
 
 class FrequenciaModel(models.Model):
-    hora_inicio = models.DateTimeField()
+    hora_inicio = models.DateTimeField(default=datetime.now)
     hora_fim = models.DateTimeField(null=True, blank=True)
     funcionario = models.OneToOneField(Funcionario, on_delete=models.CASCADE)
 
