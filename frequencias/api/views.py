@@ -7,6 +7,9 @@ from frequencias.api.serializers import FrequenciaSerializer
 from frequencias.models import FrequenciaModel
 from users.api.serializers import FuncionarioSerializer
 
+#requisitos para funcionar: Criar autenticação e autorização
+#login
+#frequencia corrigida
 class FrequenciaViewSet(ModelViewSet):
     serializer_class = FrequenciaSerializer
     permission_classes = [IsAuthenticated]

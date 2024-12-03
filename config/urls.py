@@ -21,6 +21,7 @@ from rest_framework.authtoken import views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from frequencias.api.views import FrequenciaViewSet
 from users.api.views import FuncionarioViewSet, UserProfileExampleViewSet
+from users.views import LoginView
 
 router = SimpleRouter()
 
@@ -29,9 +30,11 @@ router.register("funcionarios", FuncionarioViewSet, basename="funcionarios")
 router.register("frequencia", FrequenciaViewSet, basename="Frequências")
 
 
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/token-auth/", views.obtain_auth_token),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('login/', LoginView.as_view(), name='login'),
 ]+router.urls
