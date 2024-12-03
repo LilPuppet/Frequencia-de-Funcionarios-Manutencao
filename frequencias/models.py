@@ -8,7 +8,7 @@ from users.models import Funcionario
 class FrequenciaModel(models.Model):
     hora_inicio = models.DateTimeField(default=datetime.now)
     hora_fim = models.DateTimeField(null=True, blank=True)
-    funcionario = models.OneToOneField(Funcionario, on_delete=models.CASCADE)
+    funcionario = models.ForeignKey(Funcionario, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'Funcionário: [{self.funcionario}] - Frequencia:[{self.hora_inicio}] - [{self.hora_fim}]'
