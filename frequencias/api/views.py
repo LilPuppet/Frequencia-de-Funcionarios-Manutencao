@@ -21,9 +21,10 @@ class FrequenciaViewSet(ModelViewSet):
         funcionario = serializer.validated_data['funcionario']
         hora_atual = datetime.now()
 
-        frequencia_aberta = FrequenciaModel.objects.filter(funcionario=funcionario, hora_fim__isnull=True).exists()
+        frequencia_aberta = FrequenciaModel.objects.filter(funcionario=funcionario, hora_fim__isnull=True).first()
 
         if frequencia_aberta:
+            # Caso haja uma frequência aberta, fecha a frequência anterior e atualiza com a hora_fim
             frequencia_aberta.hora_fim = hora_atual
             frequencia_aberta.save()
             serializer_saida = FrequenciaSerializer(frequencia_aberta)
@@ -31,11 +32,12 @@ class FrequenciaViewSet(ModelViewSet):
                 {"Info": "Frequência encerrada com sucesso!", "data": serializer_saida.data},
                 status=status.HTTP_200_OK
             )
-        else: #pegar o funcionario
+        else:
+            # Caso não haja frequência aberta, cria uma nova
             nova_frequencia = FrequenciaModel.objects.create(
                 funcionario=funcionario,
                 hora_inicio=hora_atual,
-                hora_fim=None
+                hora_fim=None  # Deixa o campo hora_fim nulo inicialmente
             )
             serializer_saida = FrequenciaSerializer(nova_frequencia)
             return Response(
