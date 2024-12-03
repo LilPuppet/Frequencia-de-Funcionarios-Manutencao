@@ -20,3 +20,20 @@ class FuncionarioCreateSerializer(serializers.Serializer):
     departamento = serializers.CharField(max_length=140)
     login = serializers.CharField(max_length=100)
     senha = serializers.CharField(max_length=100)
+
+    def create(self, validated_data):
+        # Cria o usuário
+        user = user.objects.create_user(
+            username=validated_data['login'],
+            password=validated_data['senha']
+        )
+
+        # Cria o funcionário vinculado ao usuário
+        funcionario = Funcionario.objects.create(
+            nome=validated_data['nome'],
+            matricula=validated_data['matricula'],
+            departamento=validated_data['departamento'],
+            user=user
+        )
+        return funcionario
+
