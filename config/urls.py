@@ -20,14 +20,15 @@ from rest_framework.routers import SimpleRouter
 from rest_framework.authtoken import views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from frequencias.api.views import FrequenciaViewSet
-from users.api.views import FuncionarioViewSet, UserProfileExampleViewSet
-from users.views import FuncionarioView, LoginView
+from users.api.views import FuncionarioViewSetCreate, UserProfileExampleViewSet
+from users.views import LoginView
 
 # Configurando o router do DRF
 router = SimpleRouter()
 router.register("users", UserProfileExampleViewSet, basename="users")
-router.register("funcionarios", FuncionarioViewSet, basename="funcionarios")
-router.register("frequencias", FrequenciaViewSet, basename="frequencias")  # Nome corrigido para o plural
+router.register("funcionarios", FuncionarioViewSetCreate, basename="funcionarios")
+
+router.register("frequencias", FrequenciaViewSet, basename="frequencias")  
 
 urlpatterns = [
     # Admin
@@ -42,8 +43,6 @@ urlpatterns = [
 
     # Views manuais
     path("login/", LoginView.as_view(), name="login"),
-    path("funcionarios/", FuncionarioView.as_view(), name="funcionarios-list"),
-    path("funcionarios/<int:pk>/", FuncionarioView.as_view(), name="funcionarios-detail"),
 
     # Incluindo as URLs do app frequencias
     path("frequencias/", include("frequencias.urls")),  # Inclui URLs adicionais do app frequencias

@@ -13,7 +13,7 @@ class UserProfileExampleViewSet(ModelViewSet):
     queryset = UserProfileExample.objects.all()
     http_method_names = ['get', 'put']
 
-class FuncionarioViewSet(ModelViewSet):
+class FuncionarioViewSetCreate(ModelViewSet):
     serializer_class = FuncionarioSerializer
     permission_classes = [AllowAny]
     queryset = Funcionario.objects.all()
@@ -36,3 +36,28 @@ class FuncionarioViewSet(ModelViewSet):
 
         serializer_saida = FuncionarioSerializer(novo_Funcionario)
         return Response({"Info": "Cadastro realizado!", "data":serializer_saida.data}, status=status.HTTP_201_CREATED)
+    
+    def update(self, request, *args, **kwargs):
+        funcionario = self.get_object()
+        serializer = FuncionarioCreateSerializer(data=request.data, partial=False)
+        serializer.is_valid(raise_exception=True)
+
+        if 'login' in serializer.validated_data:
+            funcionario.user.username = serializer.validated_data['login']
+            funcionario.user.save()
+
+        funcionario.nome = serializer.validated_data['nome']
+        funcionario.matricula = serializer.validated_data['matricula']
+        funcionario.departamento = serializer.validated_data['departamento']
+        funcionario.save()
+
+        serializer_saida = FuncionarioSerializer(funcionario)
+        return Response(
+            {"Info": "Atualização realizada com sucesso!", "data": serializer_saida.data},
+            status=status.HTTP_200_OK)
+    
+    def destroy(self, request, *args, **kwargs):
+        funcionario = self.get_object()
+        funcionario.user.delete()  # Exclui o usuário associado
+        funcionario.delete()
+        return Response({"Info": "Funcionário excluído com sucesso!"}, status=status.HTTP_204_NO_CONTENT)
