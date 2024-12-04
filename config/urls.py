@@ -27,7 +27,6 @@ from users.views import LoginView
 router = SimpleRouter()
 router.register("users", UserProfileExampleViewSet, basename="users")
 router.register("funcionarios", FuncionarioViewSetCreate, basename="funcionarios")
-
 router.register("frequencias", FrequenciaViewSet, basename="frequencias")  
 
 urlpatterns = [
@@ -45,7 +44,7 @@ urlpatterns = [
     path("login/", LoginView.as_view(), name="login"),
 
     # Incluindo as URLs do app frequencias
-    path("frequencias/", include("frequencias.urls")),  # Inclui URLs adicionais do app frequencias
+    #path("frequencias/", include("frequencias.urls")),  # Inclui URLs adicionais do app frequencias
 ]
 
 # Adicionando as rotas do DRF

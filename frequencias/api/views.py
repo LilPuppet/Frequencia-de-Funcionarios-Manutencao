@@ -1,6 +1,6 @@
 from datetime import datetime
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from frequencias.api.serializers import FrequenciaSerializer
@@ -9,35 +9,33 @@ from users.api.serializers import FuncionarioSerializer
 
 class FrequenciaViewSet(ModelViewSet):
     serializer_class = FrequenciaSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     queryset = FrequenciaModel.objects.all()
 
     def create(self, request):
-        serializer = FuncionarioSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        funcionario = serializer.validated_data['funcionario']
+        serializer_func = FrequenciaSerializer(data=request.data)
+        serializer_func.is_valid(raise_exception=True)
+        funcionario = serializer_func.validated_data['funcionario']
         hora_atual = datetime.now()
 
-        frequencia_aberta = FrequenciaModel.objects.filter(funcionario=funcionario, hora_fim__isnull=True).first()
-
-        if frequencia_aberta:
-            # Caso haja uma frequência aberta, fecha a frequência anterior e atualiza com a hora_fim
-            frequencia_aberta.hora_fim = hora_atual
-            frequencia_aberta.save()
-            serializer_saida = FrequenciaSerializer(frequencia_aberta)
-            return Response(
-                {"Info": "Frequência encerrada com sucesso!", "data": serializer_saida.data},
-                status=status.HTTP_200_OK
-            )
-        else:
-            # Caso não haja frequência aberta, cria uma nova
-            nova_frequencia = FrequenciaModel.objects.create(
-                funcionario=funcionario,
-                hora_inicio=hora_atual,
-                hora_fim=None
-            )
-            serializer_saida = FrequenciaSerializer(nova_frequencia)
-            return Response(
-                {"Info": "Frequência iniciada com sucesso!", "data": serializer_saida.data},
-                status=status.HTTP_201_CREATED
-            )
+        nova_frequencia = FrequenciaModel.objects.create(
+            funcionario=funcionario,
+            hora_inicio=hora_atual,
+            hora_fim=None
+        )
+        serializer_saida = FrequenciaSerializer(nova_frequencia)
+        return Response(
+            {"Info": "Frequência iniciada com sucesso!", "data": serializer_saida.data},
+            status=status.HTTP_201_CREATED
+        )
+    
+    
+    def partial_update(self, request, *args, **kwargs):
+        frequencia = self.get_object()
+        frequencia.hora_fim = datetime.now()
+        frequencia.save()
+        serializer_saida = FrequenciaSerializer(frequencia)
+        return Response(
+            {"Info": "Atualização realizada com sucesso!", "data": serializer_saida.data},
+            status=status.HTTP_200_OK
+        )
